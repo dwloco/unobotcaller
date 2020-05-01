@@ -68,10 +68,10 @@ class TeleBot(telegram.Bot):
 
         user = update.message.from_user
         nombre = user.first_name + " " + user.last_name
-        print(user)
+
         if not user.is_bot:
             if self.boludeo:
-                update.message.reply_text(f"{mensaje_alterado} jajajaj re gay")
+                update.message.reply_text(f"{TeleBot.get_name(user)} dice: {mensaje_alterado} jajajaj re gay")
                 thread_delete = threading.Thread(target=self.delayed_delete, daemon=True, args=(context, update.message.chat_id, update.message.message_id))
                 thread_delete.start()
             if nombre not in self.lista_nombres:
@@ -85,8 +85,15 @@ class TeleBot(telegram.Bot):
             context.bot.kick_chat_member(update.message.chat_id, user.id)
 
     @staticmethod
+    def get_name(user):
+        if user.username is not None:
+            return user.username
+        else:
+            return user.first_name + " " + user.last_name[0]
+
+    @staticmethod
     def delayed_delete(context, chat_id, message_id):
-        sleep(1)
+        sleep(0.5)
         try:
             context.bot.delete_message(chat_id, message_id)
         except:
