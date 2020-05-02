@@ -27,6 +27,7 @@ class TeleBot(telegram.Bot):
 
         self.lista_nombres = []
         self.boludeo = True
+        self.t = None
 
         # Get the dispatcher to register handlers
         dp = updater.dispatcher
@@ -62,12 +63,16 @@ class TeleBot(telegram.Bot):
         """Echo the user message."""
         especial_list = ['a', 'e', 'o', 'u', 'á', 'é', 'ó', 'ú']
         mensaje_alterado = update.message.text
+        print(mensaje_alterado)
 
         for c in especial_list:
             mensaje_alterado = mensaje_alterado.replace(c, 'i').replace(c.upper(), 'I')
 
         user = update.message.from_user
-        nombre = user.first_name + " " + user.last_name
+        if user.first_name is not None:
+            nombre = user.first_name
+        if user.last_name is not None:
+            nombre += user.last_name
 
         if not user.is_bot:
             if self.boludeo:
@@ -86,9 +91,17 @@ class TeleBot(telegram.Bot):
 
     @staticmethod
     def get_name(user):
+        print(user)
         if user.username is not None:
             return user.username
         else:
+            nom = ""
+            if user.first_name is not None:
+                nom += user.first_name
+                if user.last_name is not None:
+                    nom += " " + user.last_name[0]
+            else:
+                nom = "Anonimo"
             return user.first_name + " " + user.last_name[0]
 
     @staticmethod
