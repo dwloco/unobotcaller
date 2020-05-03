@@ -8,6 +8,7 @@ import json
 from time import sleep
 import datetime
 import telegram
+import pytz
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 class TeleBot(telegram.Bot):
@@ -65,6 +66,13 @@ class TeleBot(telegram.Bot):
         mensaje_alterado = update.message.text
         print(mensaje_alterado)
 
+        deltatime = datetime.datetime.utcnow() - update.message.date
+        print("Tiempo transcurrido " + str(deltatime.total_seconds()))
+
+        if deltatime.total_seconds() > 2*60: # El bot no responde a mensajes de hace más de 2 min
+            print("Mensaje ignorado")
+            return
+
         for c in especial_list:
             mensaje_alterado = mensaje_alterado.replace(c, 'i').replace(c.upper(), 'I')
 
@@ -72,7 +80,7 @@ class TeleBot(telegram.Bot):
         if user.first_name is not None:
             nombre = user.first_name
         if user.last_name is not None:
-            nombre += user.last_name
+            nombre += " " + user.last_name
 
         if not user.is_bot:
             if self.boludeo:
@@ -91,7 +99,7 @@ class TeleBot(telegram.Bot):
 
     @staticmethod
     def get_name(user):
-        print(user)
+        # print(user)
         if user.username is not None:
             return user.username
         else:
