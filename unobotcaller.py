@@ -69,7 +69,7 @@ class TeleBot(telegram.Bot):
         deltatime = datetime.datetime.utcnow() - update.message.date
         print("Tiempo transcurrido " + str(deltatime.total_seconds()))
 
-        if deltatime.total_seconds() > 2*60: # El bot no responde a mensajes de hace más de 2 min
+        if deltatime.total_seconds() > 1*60: # El bot no responde a mensajes de hace más de 2 min
             print("Mensaje ignorado")
             return
 
