@@ -152,8 +152,11 @@ class TeleBot(telegram.Bot):
     @staticmethod
     def putear(update, context):
         while TeleBot.puteando:
-            sleep(1)
-            context.bot.send_message(update.message.chat_id, text="Puto el que lee")
+            try:
+                context.bot.send_message(update.message.chat_id, text="Puto el que lee @echisaidman")
+            except:
+                print("Ocurrio un error")
+            sleep(1.5)
         update.message.reply_text("._.")
         update.message.reply_text("Putazo")
 
